@@ -1,5 +1,11 @@
 import { useState } from 'react'
 
+const Button = ({onClick, label}) => {
+  return (
+      <button onClick={onClick} >{label}</button>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -14,9 +20,25 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
 
+  console.log("No. of anedotes:", anecdotes.length)
+
+  const getRandomAnedote = (min, max) => {
+    let randomInt = selected
+    while (randomInt === selected) {
+      console.log("Current int", selected)
+      randomInt = Math.floor(Math.random() * (max - min) + min)
+      console.log("New int:", randomInt)
+    }
+    return setSelected(randomInt)
+  }
+
   return (
     <div>
       {anecdotes[selected]}
+      <div>
+        <Button onClick={() => getRandomAnedote(0, anecdotes.length)} label="next anecdote"/>
+      </div>
+
     </div>
   )
 }
