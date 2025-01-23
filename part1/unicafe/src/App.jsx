@@ -8,7 +8,10 @@ const Button = ({onClick, label}) => {
 
 const StatisticLine = ({text, value}) => {
   return (
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -17,14 +20,14 @@ const Statistics = ({good, neutral, bad}) => {
     if (good + neutral + bad === 0) {
       return 0
     }
-    return (good - bad)/(good + neutral + bad)
+    return ((good - bad)/(good + neutral + bad)).toFixed(2)
   }
 
   const positivePercentage = (good, neutral, bad) => {
     if (good + neutral + bad === 0) {
       return 0
     }
-    return 100 * good/(good + neutral + bad)
+    return String((100 * good/(good + neutral + bad)).toFixed(1)) + "%"
   }
 
   if (good + neutral + bad === 0) {
@@ -36,12 +39,16 @@ const Statistics = ({good, neutral, bad}) => {
   }
   return (
     <div>
-      <StatisticLine text="good" value={good}/>
-      <StatisticLine text="neutral" value={neutral}/>
-      <StatisticLine text="bad" value={bad}/>
-      <StatisticLine text="all" value={good + neutral + bad}/>
-      <StatisticLine text="average" value={average(good, neutral, bad)}/>
-      <StatisticLine text="positive" value={positivePercentage(good, neutral, bad)}/>
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good}/>
+          <StatisticLine text="neutral" value={neutral}/>
+          <StatisticLine text="bad" value={bad}/>
+          <StatisticLine text="all" value={good + neutral + bad}/>
+          <StatisticLine text="average" value={average(good, neutral, bad)}/>
+          <StatisticLine text="positive" value={positivePercentage(good, neutral, bad)}/>
+        </tbody>
+      </table>
     </div>
   )
 }
