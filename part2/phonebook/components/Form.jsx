@@ -1,4 +1,5 @@
 import { useState } from "react";
+import serverCommands from "/components/serverCommands";
 
 const Form = ({ persons, setPersons }) => {
 	const [newName, setNewName] = useState("");
@@ -7,17 +8,26 @@ const Form = ({ persons, setPersons }) => {
 	const addPerson = (event) => {
 		event.preventDefault();
 		const personObject = {
-			id: String(persons.length + 1),
 			name: newName,
 			number: newNumber,
 		};
 		console.log("🚀 ~ addPerson ~ personObject:", personObject);
 		if (persons.map((person) => person.name).includes(personObject.name)) {
-			alert(`${personObject.name} is already added to phonebook`);
+			if (confirm(`${personObject.name} is already added to phonebook, replace the old number with the new one?`)) {
+				const id = persons.find((person) => person.name === personObject.name).id;
+				serverCommands.updatePerson(id, personObject).then((response) => {
+					console.log("Updated new person", response.data);
+					const updatedPersons = persons.map((person) => (person.id === id ? response.data : person));
+					setPersons(updatedPersons);
+				});
+			}
 		} else {
-			setPersons(persons.concat(personObject));
-			setNewName("");
-			setNewNumber("");
+			serverCommands.createPerson(personObject).then((response) => {
+				setPersons(persons.concat(response.data));
+				console.log("Added new person", response.data);
+				setNewName("");
+				setNewNumber("");
+			});
 		}
 	};
 

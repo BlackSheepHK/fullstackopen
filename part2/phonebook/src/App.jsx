@@ -1,21 +1,20 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "/components/Filter";
 import FilteredRecords from "/components/FilteredRecords";
 import Form from "/components/Form";
+import serverCommands from "/components/serverCommands";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [filter, setFilter] = useState("");
 
 	const getInitialPersons = () => {
-		console.log("effect");
-		axios.get("http://localhost:3001/persons").then((response) => {
-			console.log("🚀 ~ axios.get ~ response:", response)
-			setPersons(response.data);
+		serverCommands.getPersons().then((response) => {
+			console.log("🚀 ~ initialPersons ~ response:", response);
+			setPersons(response);
 		});
 	};
-	useEffect(getInitialPersons, [])
+	useEffect(getInitialPersons, []);
 
 	return (
 		<div>
@@ -24,7 +23,7 @@ const App = () => {
 			<h2>add a new</h2>
 			<Form persons={persons} setPersons={setPersons} />
 			<h2>Numbers</h2>
-			<FilteredRecords persons={persons} filter={filter} />
+			<FilteredRecords persons={persons} setPersons={setPersons} filter={filter} />
 		</div>
 	);
 };

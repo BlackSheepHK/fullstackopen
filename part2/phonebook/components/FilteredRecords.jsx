@@ -1,12 +1,12 @@
 import Record from "/components/Record";
 
-const FilteredRecords = ({ persons, filter }) => {
+const FilteredRecords = ({ persons, setPersons, filter }) => {
 	return (
 		<div>
 			{persons
 				.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
 				.map((person) => (
-					<Record person={person} key={person.id} />
+					<Record key={person.id} person={person} persons={persons} setPersons={setPersons} />
 				))}
 		</div>
 	);
