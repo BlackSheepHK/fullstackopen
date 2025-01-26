@@ -1,9 +1,17 @@
 import { useState } from "react";
 import serverCommands from "/components/serverCommands";
 
-const Form = ({ persons, setPersons }) => {
+const Form = ({ persons, setPersons, setTopMessage, setTopMessageColor }) => {
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
+
+	const fiveSecondMessage = (message, color) => {
+		setTopMessage(message);
+		setTopMessageColor(color);
+		setTimeout(() => {
+			setTopMessage(null);
+		}, 5000);
+	};
 
 	const addPerson = (event) => {
 		event.preventDefault();
@@ -19,12 +27,14 @@ const Form = ({ persons, setPersons }) => {
 					console.log("Updated new person", response.data);
 					const updatedPersons = persons.map((person) => (person.id === id ? response.data : person));
 					setPersons(updatedPersons);
+					fiveSecondMessage(`Updated ${personObject.name}'s number`, "green");
 				});
 			}
 		} else {
 			serverCommands.createPerson(personObject).then((response) => {
 				setPersons(persons.concat(response.data));
 				console.log("Added new person", response.data);
+				fiveSecondMessage(`Added ${personObject.name}'s number`, "green");
 				setNewName("");
 				setNewNumber("");
 			});
